@@ -1,18 +1,44 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import fetch from 'isomorphic-fetch';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { recentCampers: [], allTimeCampers: [] };
+  }
+
+  componentDidMount() {
+    fetch('//fcctop100.herokuapp.com/api/fccusers/top/recent')
+      .then(response => {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        return response.json();
+      })
+      .then(campers => {
+        this.setState({recentCampers: campers});
+      });
+
+    fetch('//fcctop100.herokuapp.com/api/fccusers/top/alltime')
+      .then(response => {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        return response.json();
+      })
+      .then(campers => {
+        this.setState({allTimeCampers: campers});
+      });
+  }
+
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        Recent campers: {this.state.recentCampers.length > 0 ? "yes" : "maybe"}
+        <br />
+        All time campers: {this.state.allTimeCampers.length > 0 ? "yes" : "maybe"}
       </div>
     );
   }
