@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
-import './App.css';
+import '../App.css';
+import CamperList from './camper-list';
 
 class App extends Component {
   constructor(props) {
@@ -34,11 +35,13 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <div>
         Recent campers: {this.state.recentCampers.length > 0 ? "yes" : "maybe"}
         <br />
         All time campers: {this.state.allTimeCampers.length > 0 ? "yes" : "maybe"}
+        <CamperList camperList={this.state.recentCampers} />
       </div>
     );
   }
